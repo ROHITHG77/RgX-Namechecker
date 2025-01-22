@@ -1,0 +1,10 @@
+{
+  "name": "fivem-discord-verify",
+  "version": "1.0.0",
+  "main": "server.js",
+  "license": "MIT",
+  "dependencies": {
+    "discord.js": "13.16.0",
+    "node-fetch": "2.6.7"
+  }
+}
