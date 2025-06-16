@@ -94,9 +94,15 @@ on('playerConnecting', async (playerName, kickCallback, deferrals) => {
         try {
             discordMember = await getMemberInfo(activeServer, discordId);
         } catch (err) {
-            console.error(`[RgX-NameChecker] Failed to verify ${discordId}:`, err);
-            await createLog('Verification Error', `Failed to verify ${playerName}. Error: ${err.message}`, '#FF0000');
-            deferrals.done('[RgX-NameChecker] Unable to verify Discord membership. Please ensure you are in our Discord server.');
+            if (err.message.includes('Unknown Member')) {
+                console.log(`[RgX-NameChecker] ${playerName} rejected: Not in Discord server`);
+                await createLog('Access Denied', `${playerName} is not a member of the Discord server`, '#FF0000');
+                deferrals.done('[RgX-NameChecker] You must be a member of our Discord server to join. Please join and try again.');
+            } else {
+                console.error(`[RgX-NameChecker] Failed to verify ${discordId}:`, err);
+                await createLog('Verification Error', `Failed to verify ${playerName}. Error: ${err.message}`, '#FF0000');
+                deferrals.done('[RgX-NameChecker] Unable to verify Discord membership. Please try again later.');
+            }
             return;
         }
 
